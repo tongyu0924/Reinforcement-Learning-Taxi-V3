@@ -57,7 +57,6 @@ print(f"Training completed over {num_episodes} episodes")
 input("Press Enter to watch trained agent...")
 
 total_epochs, total_penalties = 0, 0
-episodes = 100
 frames = []
 
 def print_frames(frames):
@@ -71,35 +70,35 @@ def print_frames(frames):
       print(f"Reward: {frame['reward']}")
       time.sleep(1)
 
-for ep in range(episodes):
-    state = env.reset()
-    epochs, penalties, reward = 0, 0, 0
-    
-    done = False
-    
-    while not done:
-        action = np.argmax(q_table[state])
-        state, reward, done, info = env.step(action)
+for ep in range(num_episodes):
+  state = env.reset()
+  epochs, penalties, reward = 0, 0, 0
 
-        if reward == -10:
-            penalties += 1
-        
-        # Put each rendered frame into dict for animation
-        frames.append({
-            'frame': env.render(mode='ansi'),
-            'episode': ep, 
-            'state': state,
-            'action': action,
-            'reward': reward
-            }
-        )
-        epochs += 1
+  done = False
 
-    total_penalties += penalties
-    total_epochs += epochs
+  while not done:
+      action = np.argmax(q_table[state])
+      state, reward, done, info = env.step(action)
 
-print(f"Results after {episodes} episodes:")
-print(f"Average timesteps per episode: {total_epochs / episodes}")
-print(f"Average penalties per episode: {total_penalties / episodes}")
+      if reward == -10:
+          penalties += 1
+      
+      # Put each rendered frame into dict for animation
+      frames.append({
+          'frame': env.render(mode='ansi'),
+          'episode': ep, 
+          'state': state,
+          'action': action,
+          'reward': reward
+          }
+      )
+      epochs += 1
+
+  total_penalties += penalties
+  total_epochs += epochs
+
+print(f"Results after {num_episodes} episodes:")
+print(f"Average timesteps per episode: {total_epochs / num_episodes}")
+print(f"Average penalties per episode: {total_penalties / num_episodes}")
 
 print_frames(frames)
